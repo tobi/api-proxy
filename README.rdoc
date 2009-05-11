@@ -1,22 +1,31 @@
-= EM-Proxy
+= API Proxy
 
-EventMachine Proxy DSL: 
-- http://www.igvita.com/2009/04/20/ruby-proxies-for-scale-and-monitoring/
+Proxy server that's supposed to be accelerate remote calls in Shopify. 
 
-== Simple port forwarding proxy
+Inspired by Ilya Grigorik's inspired piece of work on EM based proxies:  
 
-    Proxy.start(:host => "0.0.0.0", :port => 80) do |conn|
-      conn.server :srv, :host => "127.0.0.1", :port => 81
+  http://www.igvita.com/2009/04/20/ruby-proxies-for-scale-and-monitoring/
 
-      # modify / process request stream
-      conn.on_data do |data|
-        p [:on_data, data]
-        data
-      end
 
-      # modify / process response stream
-      conn.on_response do |backend, resp|
-        p [:on_response, backend, resp]
-        resp
-      end
-    end
+== Overview
+
+Shopify forwards web requests to many remote locations for API 
+apps. Api apps roughly work like facebook applications in the 
+sense that the web requests arrives at Shopify's door but then 
+needs to be forwarded to an arbitrary proxy endpoint.
+
+If we would do these remote calls within the rails code we would 
+quickly run out of mongrels even if one of the backend services 
+would be slow. 
+
+This proxy server will check memcached for the endpoint URL 
+and - if present - perform the HTTP request. After the http request 
+is successfully completed it will stick the result into memcached 
+and set two headers X-Proxy-Status and X-Proxy-Content before sending 
+the request Shopify for further processing (liquid).
+
+== Licence
+
+This code is protected by the fact that it solves a proprietary problem. 
+I hope it can serve as an example for people solving similar issues and I 
+hope it will further the excellent discussion that Ilya kicked off.  
