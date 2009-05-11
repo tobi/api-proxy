@@ -9,19 +9,6 @@ require 'zlib'
 $cache = Memcached.new('localhost:11211') 
 
 
-class Util
-            
-  def self.generate_key
-    "proxy-content/#{crc32([Time.now, rand, @uri].join)}" 
-  end     
-  
-  def self.crc32(content)
-    Zlib.crc32(content, 0)
-  end
-  
-end
-
-
 Proxy.start(:host => "0.0.0.0", :port => 3005) do |conn|
   conn.server :shopify, :host => "127.0.0.1",  :port => 80
 
@@ -30,11 +17,7 @@ Proxy.start(:host => "0.0.0.0", :port => 3005) do |conn|
     request = Request.new(data)   
     
     if request.path =~ /^\/proxy/   
-      
-      
-      forwarder = Forwarder.new             
-      forwarder.forward(request)
-                                       
+                                             
       proxy = ProxyEndpoint.new(request.request_uri)
       
       if proxy.available?  
@@ -52,7 +35,7 @@ Proxy.start(:host => "0.0.0.0", :port => 3005) do |conn|
       
       request.data
     else
-      # ...
+      request.data
     end
   end
  

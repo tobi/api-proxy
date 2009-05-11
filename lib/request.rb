@@ -14,7 +14,11 @@ class Request
   
   def content_type
     headers['Content-Type']
-  end                                        
+  end             
+  
+  def request_uri
+    headers['HTTP_REQUEST_URI']
+  end                           
   
   def headers
     @headers ||= @data.scan(Headers).inject(Hash.new) do |hash, (k, v)|

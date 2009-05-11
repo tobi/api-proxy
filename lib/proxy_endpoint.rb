@@ -13,8 +13,8 @@ class ProxyEndpoint
   ProxyRoot = /https?\:\/\/.*?\/[\w_-]+\/[\w_-]+/
     
   def initialize(uri)
-    @uri = uri                                     
-    @proxy_root = uri.scan(ProxyRoot).flatten.first
+    @uri = uri.to_s                                     
+    @proxy_root = @uri.scan(ProxyRoot).flatten.first
 
     if @proxy_root.nil?
       raise Error, "could not find proxy root for url"
