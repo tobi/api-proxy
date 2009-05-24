@@ -26,6 +26,7 @@ class TestProxyEndpoint < Test::Unit::TestCase
     assert_equal 'http://127.0.0.1/a/b', ProxyEndpoint.new('http://127.0.0.1/a/b').proxy_root
     assert_equal 'http://127.0.0.1/a-b/b_c', ProxyEndpoint.new('http://127.0.0.1/a-b/b_c').proxy_root
     assert_equal 'http://www.proxyserver.com:81/path/to', ProxyEndpoint.new('http://www.proxyserver.com:81/path/to/endpoint?with=param').proxy_root
+    assert_equal 'http://localhost:3005/a/b', ProxyEndpoint.new('http://localhost:3005/a/b').proxy_root
   end
 
   def test_invalid_proxy_root
@@ -59,8 +60,8 @@ class TestProxyEndpoint < Test::Unit::TestCase
     assert_equal 'Third party content', proxy.content
     assert_equal '200', proxy.status
     
-  end  
-  
+  end          
+    
   def test_post_forward                           
     proxy = ProxyEndpoint.new('http://127.0.0.1/a/b')      
     

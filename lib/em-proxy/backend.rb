@@ -9,12 +9,10 @@ module EventMachine
       end
 
       def connection_completed
-        p [@name, :conn_complete]
         @connected.succeed
       end
 
       def receive_data(data)
-        p [@name, data]
         @data.push data
         @plexer.relay_from_backend(@name, data)
       end
@@ -28,7 +26,6 @@ module EventMachine
       # Notify upstream plexer that the backend server is done
       # processing the request
       def unbind
-        p [@name, :unbind]
         @plexer.unbind_backend(@name)
       end
     end

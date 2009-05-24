@@ -17,7 +17,7 @@ class Request
   end             
   
   def request_uri
-    headers['HTTP_REQUEST_URI']
+    'http://' + headers['Host'] + @path
   end                           
   
   def headers

@@ -13,7 +13,6 @@ module EventMachine
       end
 
       def receive_data(data)
-        p [:connection, data]
         data = @on_data.call(data)
 
         @servers.values.compact.each do |s|
@@ -37,8 +36,6 @@ module EventMachine
       # relay data from backend server to client
       #
       def relay_from_backend(name, data)
-        p [:relay_from_backend, name, data]
-
         data = @on_response.call(name, data)
         send_data data unless data.nil?
       end

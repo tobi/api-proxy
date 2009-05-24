@@ -10,7 +10,7 @@ class ProxyEndpoint
   class TimeoutError < Error; end
   class MethodNotAllowed < Error; end
   
-  ProxyRoot = /https?\:\/\/.*?\/[\w_-]+\/[\w_-]+/
+  ProxyRoot = /https?\:\/\/.*?\/[\w\:_-]+?\/[\w_-]+/
     
   def initialize(uri)
     @uri = uri.to_s                                     
@@ -54,12 +54,6 @@ class ProxyEndpoint
     else                     
       raise MethodNotAllowed.new(api_client)
     end        
-
-    if (200..299).include?(response.code.to_i)
-      response.body
-    else
-      raise RequestError.new(api_client, response)
-    end  
     
     self.content = response.body    
     self.status  = response.code    
